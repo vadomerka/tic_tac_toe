@@ -26,9 +26,12 @@ def check(fields):
             return fields[n]
     for c in [0,1,2]:
         n = c + 1 
-        if fields[n] != " " and fields[n] == fields[n + size] and fields[n] == fields[2*size]:
+        if fields[n] != " " and fields[n] == fields[n + size] and fields[n] == fields[n + 2*size]:
             return fields[n]
+    print('_'*8)
+    print(fields)
     return False
+    
 
 lineg = " __ __ __"
 line1 = "{}|{}|{}|{}|"
