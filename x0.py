@@ -13,6 +13,7 @@ for i in [1,2,3]:
         field_names[count] = j + str(i)
         count += 1
 numbers = ['1','2','3','4','5','6','7','8','9']
+x_or_0 = True
 while True:
     print(lineabc)
     print(line1.format(1,fields[1],fields[2],fields[3]))
@@ -24,7 +25,8 @@ while True:
         continue
     else:
         number = int(number)
-        fields[number] = "X"
-
-
-
+        if x_or_0:
+            fields[number] = "X"
+        else:
+            fields[number] = "0"
+        x_or_0 = not x_or_0
