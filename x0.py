@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 def  final(field):
-    print("Победили {}!".format(field))
-
+    if field != " ":
+        print("Победили {}!".format(field))
+    else:
+        print("Ничья!") 
 
 
 
@@ -28,10 +30,12 @@ def check(fields):
         n = c + 1 
         if fields[n] != " " and fields[n] == fields[n + size] and fields[n] == fields[n + 2*size]:
             return fields[n]
-    print('_'*8)
-    print(fields)
-    return False
-    
+
+    for k,v in fields.items():
+        if v == " ":
+            return False
+    return " "
+
 
 lineg = " __ __ __"
 line1 = "{}|{}|{}|{}|"
@@ -70,4 +74,5 @@ while True:
             show_field(fields)
             final(r)
             break
+
 
