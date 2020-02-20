@@ -1,11 +1,70 @@
 #!/usr/bin/python3
+
+from enum import Enum
+class FieldState(Enum):
+    empty = 0
+    playerx = 1
+    player0 = 2
+
+class Field():
+    def __init__(self, row, col, state=FieldState.empty):
+        self.state = state
+        self.row = row
+        self.col = col
+
+    def __repr__(self):
+        return "{}, {}, {}\n".format(self.state, self.row, self.col)
+
+
+    def __str__(self):
+        if self.state == FieldState.playerx:
+            return "X"
+        if self.state == FieldState.player0:
+            return "0"
+        return " "
+
+
+class Game():
+    def __init__(self):
+        self.fields = {}       
+        self.size = 3
+        self.lineg = " __ __ __"
+        self.line1 = "{}|{}|{}|{}|"
+        self.lineabc = "  A B C"
+        self.field_names = {}
+        self.fields = {}
+        for r in range(self.size):
+            for c in range(self.size):
+                n = c + r * self.size
+                self.fields[n] = Field(r, c) 
+
+
+    def __repr__(self):
+        return "{}".format(self.fields)
+
+
+    def draw_head(self):
+        print(self.lineabc)
+
+
+    def draw_board(self):
+        self.draw_head()
+        for r in range(3):
+            shift = r * self.size
+            print(self.line1.format(r+1,self.fields[0 + shift],self.fields[1 + shift],self.fields[2 + shift]))
+
+
+def test():
+    game = Game()
+    game.draw_board()
+    exit()
+
+
 def  final(field):
     if field != " ":
         print("Победили {}!".format(field))
     else:
         print("Ничья!") 
-
-
 
 def show_field(fields):
     print(lineabc)
