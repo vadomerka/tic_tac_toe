@@ -32,7 +32,13 @@ class Game():
         self.line1 = "{}|{}|{}|{}|"
         self.lineabc = "  A B C"
         self.field_names = {}
-        self.fields = {}
+        self.numbers = ['1','2','3','4','5','6','7','8','9']
+        count = 1
+        for i in [1,2,3]:
+            for j in ["A","B","C"]:
+                self.field_names[count] = j + str(i)
+                count += 1
+
         for r in range(self.size):
             for c in range(self.size):
                 n = c + r * self.size
@@ -52,13 +58,57 @@ class Game():
         for r in range(3):
             shift = r * self.size
             print(self.line1.format(r+1,self.fields[0 + shift],self.fields[1 + shift],self.fields[2 + shift]))
+    
+    def process_event(self):
+        while True:
+            number = input("Введите номер ячейки:\n{}\n".format(self.field_names))
+            if number not in self.numbers:
+                print("Введите номер ячейки из диапозона {}".format(self.numbers))
+                continue
+            n = int(number) - 1
+            row =  n / self.size
+            col = n % self.size
+            return int(row), int(col)
+
+        return None, None
+
+
+    def run(self):
+        x_or_0 = True
+        while True:
+            self.draw_board()
+            row, col = self.process_event()
+            print(row,col)
+            if not row or not col:
+                print("Введите номер ячейки из диапозона {}".format(numbers)) 
+                print("Выход")
+                break
+            else:
+                number = int(number)
+                if fields[number] != " ":
+                    print("Поле уже занято")
+                    continue
+                if x_or_0:
+                    fields[number] = "X"
+                else:
+                    fields[number] = "0"
+                x_or_0 = not x_or_0
+
+
+                r = check(fields)
+                if r:
+                    show_field(fields)
+                    final(r)
+                    break    
+
 
 
 def test():
     game = Game()
-    game.draw_board()
+    game.run()
     exit()
 
+#test()
 
 def  final(field):
     if field != " ":
