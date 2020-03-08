@@ -49,6 +49,9 @@ class Game():
         return "{}".format(self.fields)
 
 
+    def number_by_field(self,field):
+        return field.row * self.size + field.col
+
     def draw_head(self):
         print(self.lineabc)
 
@@ -59,7 +62,7 @@ class Game():
             shift = r * self.size
             print(self.line1.format(r+1,self.fields[0 + shift],self.fields[1 + shift],self.fields[2 + shift]))
     
-    def process_event(self):
+    def process_event(self, state):
         while True:
             number = input("Введите номер ячейки:\n{}\n".format(self.field_names))
             if number not in self.numbers:
@@ -68,38 +71,57 @@ class Game():
             n = int(number) - 1
             row =  n / self.size
             col = n % self.size
-            return int(row), int(col)
+            return Field(int(row), int(col), state)
 
-        return None, None
+        return None
 
 
     def run(self):
-        x_or_0 = True
+        state = FieldState.playerx
         while True:
             self.draw_board()
-            row, col = self.process_event()
-            print(row,col)
-            if not row or not col:
-                print("Введите номер ячейки из диапозона {}".format(numbers)) 
-                print("Выход")
-                break
-            else:
-                number = int(number)
-                if fields[number] != " ":
-                    print("Поле уже занято")
-                    continue
-                if x_or_0:
-                    fields[number] = "X"
-                else:
-                    fields[number] = "0"
-                x_or_0 = not x_or_0
+            field = self.process_event(state)
+            print(field)
+            number = self.number_by_field(field)
+            if self.fields[number].state != FieldState.empty:
+                print("Поле уже занято")
+                continue
+            self.fields[number] = field
+            #if state == FieldState.playerx:
+            #    state = FieldState.playery
+            #else:
+            #    state = FieldState.playerx
+            state = FieldState.player0 if state == FieldState.playerx else FieldState.playerx
+            r = self.check()
+            if r:
+                show_field(fields)
+                final(r)
+                break    
 
+    def check(self):
+        fields = self.fields
+        state = fields[0].state
+        if state != FieldState.empty and state == fields[4].state and fields[4].state == fields[8].state:
+            return  state
+        state = fields[6].state
+        if state != FieldState.empty and state == fields[4].state and fields[4].state == fields[2].state:
+            return state
+        for r in [0,1,2]:
+            n = 0 + r*self.size
+            state = fields[n].state
+            if state != FieldState.empty and state  == fields[n + 1].state and state  == fields[n + 2].state:
+                return state
+        for c in [0,1,2]:
+            state = fields[c].state
+            size = self.size
+            if state != FieldState.empty and state == fields[c + size].state and state == fields[c + 2*size]:
+                return state
+    
+        for k,v in fields.items():
+            if v.state == FieldState.empty:
+                return None
+        return FieldState.empty
 
-                r = check(fields)
-                if r:
-                    show_field(fields)
-                    final(r)
-                    break    
 
 
 
