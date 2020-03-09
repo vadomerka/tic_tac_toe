@@ -62,6 +62,7 @@ class Game():
             shift = r * self.size
             print(self.line1.format(r+1,self.fields[0 + shift],self.fields[1 + shift],self.fields[2 + shift]))
     
+
     def process_event(self, state):
         while True:
             number = input("Введите номер ячейки:\n{}\n".format(self.field_names))
@@ -81,21 +82,17 @@ class Game():
         while True:
             self.draw_board()
             field = self.process_event(state)
-            print(field)
             number = self.number_by_field(field)
             if self.fields[number].state != FieldState.empty:
                 print("Поле уже занято")
                 continue
             self.fields[number] = field
-            #if state == FieldState.playerx:
-            #    state = FieldState.playery
-            #else:
-            #    state = FieldState.playerx
             state = FieldState.player0 if state == FieldState.playerx else FieldState.playerx
             r = self.check()
             if r:
-                show_field(fields)
-                final(r)
+                state = r
+                self.draw_board()
+                self.final(state)
                 break    
 
     def check(self):
@@ -114,7 +111,8 @@ class Game():
         for c in [0,1,2]:
             state = fields[c].state
             size = self.size
-            if state != FieldState.empty and state == fields[c + size].state and state == fields[c + 2*size]:
+            print("c {} fc{} fc+s{} fc+2s{} ".format(c, fields[c], fields[c+size], fields[c+2*size]))
+            if state != FieldState.empty and state == fields[c + size].state and state == fields[c + 2*size].state:
                 return state
     
         for k,v in fields.items():
@@ -122,15 +120,20 @@ class Game():
                 return None
         return FieldState.empty
 
-
-
+    def final(self, state):
+        if state == FieldState.empty:
+            print("Ничья!")
+        elif state == FieldState.playerx:
+            print("Победили Х!")
+        else:
+            print("Победили 0!")
 
 def test():
     game = Game()
     game.run()
     exit()
 
-#test()
+test()
 
 def  final(field):
     if field != " ":
